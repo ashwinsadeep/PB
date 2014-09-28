@@ -14,14 +14,13 @@ class GetGameDataHandler(BaseHandler):
 
     def post(self, *args, **kwargs):
         post = self.get_argument('unique_user_id', None)
-        print(post)
-        data = dict()
-        data['unique_key'] = hashlib.md5(post).hexdigest()
-        data['msg'] = 'Unique key is just the md5 of whatever you sent.'
         if not post:
             e = InvalidInput()
             e.set_display_data('unique_user_id is not set')
             raise e
+        data = dict()
+        data['unique_key'] = hashlib.md5(post).hexdigest()
+        data['msg'] = 'Unique key is just the md5 of whatever you sent.'
 
         view = JsonView().set_data(data).render()
         self.finish(view)
