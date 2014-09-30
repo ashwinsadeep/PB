@@ -1,5 +1,6 @@
 import hashlib
 import time
+from tornado.web import HTTPError
 from app.exception.customexceptions import InvalidInput
 from app.handlers.base import BaseHandler
 from app.view.templates.json.base import JsonView
@@ -9,8 +10,7 @@ __author__ = 'ashwin'
 
 class GetGameDataHandler(BaseHandler):
     def get(self, *args, **kwargs):
-        view = JsonView().render()
-        self.finish(view)
+        raise HTTPError(405)
 
     def post(self, *args, **kwargs):
         post = self.get_argument('unique_user_id', None)
@@ -20,7 +20,13 @@ class GetGameDataHandler(BaseHandler):
             raise e
         data = dict()
         data['unique_key'] = hashlib.md5(post).hexdigest()
-        data['msg'] = 'Unique key is just the md5 of whatever you sent.'
+        data['games'] = []
+        for x in xrange(1, 5):
+            game_data = {'id': x,
+                         'dimensions': [x, 10 - x],
+                         'data': {'debug_data': 'This can be an array or json object or whatever we decide on.'}
+            }
+            data['games'].append(game_data)
 
         view = JsonView().set_data(data).render()
         self.finish(view)
