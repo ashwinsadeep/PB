@@ -1,4 +1,6 @@
 import hashlib
+import random
+from random import randint
 import time
 from tornado.web import HTTPError
 from app.exception.customexceptions import InvalidInput
@@ -21,15 +23,26 @@ class GetGameDataHandler(BaseHandler):
         data = dict()
         data['unique_key'] = hashlib.md5(post).hexdigest()
         data['games'] = []
-        for x in xrange(1, 5):
-            game_data = {'id': x,
-                         'dimensions': [x, 10 - x],
-                         'data': {'debug_data': 'This can be an array or json object or whatever we decide on.'}
+        for count in xrange(1, 5):
+            x = count
+            y = 10-count
+            game_data = {'id': count,
+                         'dimensions': [x, y],
+                         'data': self._get_randomly_generated_array(x*y)
             }
             data['games'].append(game_data)
 
         view = JsonView().set_data(data).render()
         self.finish(view)
+        
+    def _get_randomly_generated_array(self,size):
+        possible_values = [0, 1, 2]
+        random_array = []
+        for count in xrange(0, size):
+            random_number = randint(0, 2)
+            random_array.append(possible_values[random_number])
+
+        return random_array
 
 
 class SetGameResultHandler(BaseHandler):
