@@ -1,10 +1,9 @@
 import hashlib
-import random
 from random import randint
-import time
 from tornado.web import HTTPError
 from app.exception.customexceptions import InvalidInput
 from app.handlers.base import BaseHandler
+from app.model.gamedata import GameDataModel
 from app.view.templates.json.base import JsonView
 
 __author__ = 'ashwin'
@@ -15,13 +14,13 @@ class GetGameDataHandler(BaseHandler):
         raise HTTPError(405)
 
     def post(self, *args, **kwargs):
-        post = self.get_argument('unique_user_id', None)
-        if not post:
+        unique_user_id = self.get_argument('unique_user_id', None)
+        if not unique_user_id:
             e = InvalidInput()
             e.set_display_data('unique_user_id is not set')
             raise e
         data = dict()
-        data['unique_key'] = hashlib.md5(post).hexdigest()
+        data['unique_key'] = hashlib.md5(unique_user_id).hexdigest()
         data['games'] = []
         for count in xrange(1, 5):
             x = count
@@ -32,6 +31,8 @@ class GetGameDataHandler(BaseHandler):
             }
             data['games'].append(game_data)
 
+        game_data_model = GameDataModel()
+        game_data_model.save_unique_user_id(unique_user_id, data['unique_key'], [1, 2])
         view = JsonView().set_data(data).render()
         self.finish(view)
         
