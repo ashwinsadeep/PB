@@ -7,6 +7,7 @@ class UserModel:
 
     def __init__(self):
         self.db = torndb.Connection('pb-production.cyxvzxlxcukg.us-east-1.rds.amazonaws.com', 'pixelbot', user='root', password='EnzeN9AdugodI');
+        # self.db = torndb.Connection('127.0.0.1', 'pixelbot', user='root', password='EnzeN9AdugodI');
 
     def get_user_id_from_session(self, session):
         user_id = self.db.get('SELECT _user_id from pb_user_session WHERE _session_hash = MD5(%s)', session)

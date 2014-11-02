@@ -63,9 +63,14 @@ class SetGameResultHandler(BaseHandler):
         result = json.loads(result)
         game_data_model = GameDataModel()
         for game_result in result:
-            game_id = game_result['game_id']
-            game_moves = game_result['moves']
-            game_data_model.set_game_moves(self.current_user, game_id, game_moves)
+            try:
+                game_id = game_result['game_id']
+                game_moves = game_result['moves']
+                game_score = game_result['score']
+            except KeyError:
+                raise InvalidInput('game_moves didn\'t have the necessary keys')
+
+            game_data_model.set_game_moves(self.current_user, game_id, game_moves, game_score)
 
         view = JsonView().render()
         self.finish(view)

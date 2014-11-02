@@ -11,8 +11,12 @@ class GameDataModel:
 
     def __init__(self):
         self.db = torndb.Connection('pb-production.cyxvzxlxcukg.us-east-1.rds.amazonaws.com', 'pixelbot', user='root', password='EnzeN9AdugodI');
+        # self.db = torndb.Connection('127.0.0.1', 'pixelbot', user='root', password='EnzeN9AdugodI');
 
     def get_games_from_active_tournament(self):
+        # This whole function is horribly convoluted, so that we get all the required data in one query.
+        # Once we can afford a bigger RDS instance, fetch the latest active tournament and find the games for it.
+        # That'll be much more readable
         active_games = self.db.query('SELECT _tournament_id as tournament_id,'
                                      'pb_game._id as game_id,'
                                      'pb_game._data as game_data,'
@@ -53,9 +57,10 @@ class GameDataModel:
         tournament_data['games'] = games
         return tournament_data
 
-    def set_game_moves(self, user_id, game_id, game_moves):
+    def set_game_moves(self, user_id, game_id, game_moves, score):
         user_id = int(user_id)
-        self.db.execute_lastrowid('INSERT INTO pb_game_move (_game_id, _user_id, _game_moves, _ts_created) '
-                                  'VALUES (%s, %s, %s, NOW()) ON DUPLICATE KEY UPDATE '
+        self.db.execute_lastrowid('INSERT INTO pb_game_move (_game_id, _user_id, _game_moves, _ts_created, _score) '
+                                  'VALUES (%s, %s, %s, NOW(), %s) ON DUPLICATE KEY UPDATE '
                                   '_game_moves = %s, '
-                                  '_ts_created = NOW()', game_id, user_id, game_moves, game_moves)
+                                  '_score = %s, '
+                                  '_ts_created = NOW()', game_id, user_id, game_moves, score, game_moves, score)

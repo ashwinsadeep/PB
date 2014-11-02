@@ -23,8 +23,8 @@ class InternalError(HTTPError):
 
 
 class InvalidInput(InternalError):
-    def __init__(self):
-        super(InvalidInput, self).__init__(error_code=1003, display_data='Invalid input.')
+    def __init__(self, display_data='Invalid input'):
+        super(InvalidInput, self).__init__(error_code=1003, display_data=display_data)
 
 
 class SessionExpired(InternalError):
@@ -39,4 +39,4 @@ class ApiAccessDenied(InternalError):
 
 class ResourceExists(InternalError):
     def __init__(self):
-        super(ResourceExists, self).__init__(error_code=1008, http_status=500, display_data='Resource already exists')
+        super(ResourceExists, self).__init__(error_code=1008, display_data='Resource already exists')
