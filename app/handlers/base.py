@@ -1,3 +1,4 @@
+import pprint
 import tornado
 from tornado.web import RequestHandler
 
@@ -28,8 +29,13 @@ class BaseHandler(RequestHandler):
 
     # Validate session and API keys for every request
     def prepare(self):
+        # If the request is to fetch API access key, no need to check anything else
+        if self.request.uri.find('get_api_access_key') != -1:
+            return
+
+        # In all other cases, validate api access key
         api_access_key = self.request.headers.get('X-Pb-Api-Access-Key')
-        if (api_access_key is None) or (api_access_key != 'api-access-key'):
+        if (api_access_key is None) or (api_access_key != '164ad454785aa19e1b5e15888c9dc210'):
             raise ApiAccessDenied
 
         # If the session header is set, validate it. Otherwise ignore this step, this might be an unauthenticated

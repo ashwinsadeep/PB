@@ -1,8 +1,5 @@
 import os
-from app.handlers.handlers import GetGameDataHandler, SetGameResultHandler
-from app.handlers.home import HomeHandler
-
-from app.handlers.test import TestHandler
+from app.handlers.handlers import GetGameDataHandler, SetGameResultHandler, GetApiAccessKeyHandler
 
 
 __author__ = 'ashwin'
@@ -20,10 +17,9 @@ define("port", default=8888, type=int)
 class Application(tornado.web.Application):
     def __init__(self, *overrides):
         handlers = [
-            url(r'/', HomeHandler),
-            url(r'/a', TestHandler),
             url(r'/get_game_data', GetGameDataHandler),
-            url(r'/set_game_result', SetGameResultHandler)
+            url(r'/set_game_result', SetGameResultHandler),
+            url(r'/get_api_access_key', GetApiAccessKeyHandler)
         ]
 
         settings = {

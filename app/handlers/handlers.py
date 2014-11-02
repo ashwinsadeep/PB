@@ -74,3 +74,10 @@ class SetGameResultHandler(BaseHandler):
 
         view = JsonView().render()
         self.finish(view)
+
+
+class GetApiAccessKeyHandler(BaseHandler):
+    def get(self, *args, **kwargs):
+        view = JsonView({'api_access_key':'Hkaiooiwe7#jiop8'}).render()
+        self.finish(view)
+
