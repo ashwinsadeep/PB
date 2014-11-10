@@ -1,5 +1,5 @@
 import os
-from app.handlers.handlers import GetGameDataHandler, SetGameResultHandler, GetApiAccessKeyHandler
+from app.handlers.handlers import GetGameDataHandler, SetGameResultHandler, GetApiAccessKeyHandler, CreateSessionHandler
 
 
 __author__ = 'ashwin'
@@ -19,7 +19,8 @@ class Application(tornado.web.Application):
         handlers = [
             url(r'/get_game_data', GetGameDataHandler),
             url(r'/set_game_result', SetGameResultHandler),
-            url(r'/get_api_access_key', GetApiAccessKeyHandler)
+            url(r'/get_api_access_key', GetApiAccessKeyHandler),
+            url(r'/session_create', CreateSessionHandler)
         ]
 
         settings = {

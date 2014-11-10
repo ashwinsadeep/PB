@@ -38,14 +38,16 @@ class BaseHandler(RequestHandler):
         if (api_access_key is None) or (api_access_key != '164ad454785aa19e1b5e15888c9dc210'):
             raise ApiAccessDenied
 
-        # If the session header is set, validate it. Otherwise ignore this step, this might be an unauthenticated
-        # request.
-        user_session = self.request.headers.get('X-Pbsession')
-        if (user_session is not None) and (self.current_user is None):
-            raise SessionExpired
-
     def get_current_user(self):
         user_session = self.request.headers.get('X-Pbsession')
         user_model = UserModel()
         user_id = user_model.get_user_id_from_session(user_session)
         return user_id
+
+
+class BaseAuthenticatedHandler(BaseHandler):
+    # Authenticated request. Has to have a valid session. If not, cry!
+    def prepare(self):
+        super(BaseAuthenticatedHandler, self).prepare()
+        if not self.current_user:
+            raise SessionExpired

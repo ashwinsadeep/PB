@@ -10,8 +10,8 @@ __author__ = 'ashwins'
 class GameDataModel:
 
     def __init__(self):
-        self.db = torndb.Connection('pb-production.cyxvzxlxcukg.us-east-1.rds.amazonaws.com', 'pixelbot', user='root', password='EnzeN9AdugodI')
-        # self.db = torndb.Connection('127.0.0.1', 'pixelbot', user='root', password='EnzeN9AdugodI')
+        self.db = torndb.Connection('pb-production.cyxvzxlxcukg.us-east-1.rds.amazonaws.com', 'pixelbot', user='root', password='EnzeN9AdugodI', connect_timeout=5)
+        # self.db = torndb.Connection('127.0.0.1', 'pixelbot', user='root', password='EnzeN9AdugodI', connect_timeout=5)
 
     def get_games_from_active_tournament(self):
         # This whole function is horribly convoluted, so that we get all the required data in one query.
