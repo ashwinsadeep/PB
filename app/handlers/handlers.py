@@ -88,3 +88,8 @@ class RegisterNotificationTokenHandler(BaseAuthenticatedHandler):
         user_model.update_notification_token_for_user(notif_token, self.get_current_session())
         view = JsonView().render()
         self.finish(view)
+
+
+class HttpNotFoundHandler(BaseHandler):
+    def prepare(self):
+        raise HTTPError(404)

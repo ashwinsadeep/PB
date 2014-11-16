@@ -1,6 +1,7 @@
 import os
+from app.handlers.base import BaseHandler
 from app.handlers.handlers import GetGameDataHandler, SetGameResultHandler, GetApiAccessKeyHandler, CreateSessionHandler, \
-    RegisterNotificationTokenHandler
+    RegisterNotificationTokenHandler, HttpNotFoundHandler
 
 
 __author__ = 'ashwin'
@@ -22,7 +23,8 @@ class Application(tornado.web.Application):
             url(r'/set_game_result', SetGameResultHandler),
             url(r'/get_api_access_key', GetApiAccessKeyHandler),
             url(r'/session_create', CreateSessionHandler),
-            url(r'/register_notification_token', RegisterNotificationTokenHandler)
+            url(r'/register_notification_token', RegisterNotificationTokenHandler),
+            url(r'/(.*)', HttpNotFoundHandler)
         ]
 
         settings = {

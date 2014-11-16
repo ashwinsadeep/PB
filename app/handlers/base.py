@@ -24,6 +24,10 @@ class BaseHandler(RequestHandler):
                 display_data = exception.display_data
                 error_code = exception.error_code
 
+        if status_code == 404:
+            error_code = 404
+            display_data = None
+
         json_data = JsonView(display_data, error_code).render()
         self.finish(json_data)
 
