@@ -34,6 +34,7 @@ class SetGameResultHandler(BaseAuthenticatedHandler):
             raise SessionExpired
 
         result = self.get_argument('game_moves', None)
+        # TODO: Write a validator for input validation
         if not result:
             e = InvalidInput()
             e.set_display_data('game_moves was not set')
@@ -74,4 +75,16 @@ class CreateSessionHandler(BaseHandler):
 
         session = user_model.create_session(user_id)
         view = JsonView({'session': session}).render()
+        self.finish(view)
+
+
+class RegisterNotificationTokenHandler(BaseAuthenticatedHandler):
+    def post(self, *args, **kwargs):
+        notif_token = self.get_argument('notification_token', None)
+        if not notif_token:
+            raise InvalidInput('notification_token cannot be empty')
+
+        user_model = UserModel()
+        user_model.update_notification_token_for_user(notif_token, self.get_current_session())
+        view = JsonView().render()
         self.finish(view)

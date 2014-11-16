@@ -51,3 +51,6 @@ class BaseAuthenticatedHandler(BaseHandler):
         super(BaseAuthenticatedHandler, self).prepare()
         if not self.current_user:
             raise SessionExpired
+
+    def get_current_session(self):
+        return self.request.headers.get('X-Pbsession')

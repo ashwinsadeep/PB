@@ -37,3 +37,8 @@ class UserModel:
 
     def generate_session_id(self):
         return base64.b64encode(M2Crypto.m2.rand_bytes(16))
+
+    def update_notification_token_for_user(self, notification_token, session):
+        self.db.execute('INSERT INTO pb_device_notification(_session_hash, _notification_token) '
+                        'VALUES (MD5(%s), %s) ON DUPLICATE KEY UPDATE _notification_token = %s',
+                        session, notification_token, notification_token)
