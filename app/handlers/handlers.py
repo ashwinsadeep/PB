@@ -93,3 +93,14 @@ class RegisterNotificationTokenHandler(BaseAuthenticatedHandler):
 class HttpNotFoundHandler(BaseHandler):
     def prepare(self):
         raise HTTPError(404)
+
+
+class GetGameResultHandler(BaseAuthenticatedHandler):
+    def post(self, *args, **kwargs):
+        tournament_id =  self.get_argument('tournament_id', None)
+        if not tournament_id:
+            raise InvalidInput('tournamen_id cannot be empty')
+
+        result = {'rank':12}
+        view = JsonView(result).render()
+        self.finish(view)
