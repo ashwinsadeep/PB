@@ -101,6 +101,6 @@ class GetGameResultHandler(BaseAuthenticatedHandler):
         if not tournament_id:
             raise InvalidInput('tournamen_id cannot be empty')
 
-        result = {'rank':12}
+        result = {'rank':12,'total_players':1658}
         view = JsonView(result).render()
         self.finish(view)
