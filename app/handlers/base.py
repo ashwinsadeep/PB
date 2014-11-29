@@ -31,17 +31,6 @@ class BaseHandler(RequestHandler):
         json_data = JsonView(display_data, error_code).render()
         self.finish(json_data)
 
-    # Validate session and API keys for every request
-    def prepare(self):
-        # If the request is to fetch API access key, no need to check anything else
-        if self.request.uri.find('get_api_access_key') != -1:
-            return
-
-        # In all other cases, validate api access key
-        api_access_key = self.request.headers.get('X-Pb-Api-Access-Key')
-        if (api_access_key is None) or (api_access_key != '164ad454785aa19e1b5e15888c9dc210'):
-            raise ApiAccessDenied
-
     def get_current_user(self):
         user_session = self.request.headers.get('X-Pbsession')
         user_model = UserModel()
