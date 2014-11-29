@@ -24,7 +24,7 @@ class InternalError(HTTPError):
 
 class InvalidInput(InternalError):
     def __init__(self, display_data='Invalid input'):
-        super(InvalidInput, self).__init__(error_code=1003, display_data=display_data)
+        super(InvalidInput, self).__init__(error_code=1003, http_status=200, display_data=display_data)
 
 
 class SessionExpired(InternalError):
