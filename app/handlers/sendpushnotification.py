@@ -2,6 +2,8 @@ import os
 from apnsclient import *
 import sys
 import apnsclient
+from app.exception.customexceptions import InternalError
+from app.view.templates.json.base import JsonView
 
 __author__ = 'ashwins'
 
@@ -40,7 +42,9 @@ class PushNotificationHandler:
                 # repeat with retry_message or reschedule your task
                 retry_message = res.retry()
 
+            return True
+
 
 notif_handler = PushNotificationHandler('cc85aa00960e2ec2e870826ae3ada3c3db250d65d4fe05924971e6e351402d5c')
-notif_handler.send_notification('Random message',8,'blue',1)
+status = notif_handler.send_notification('Random message',1,'blue',0)
 

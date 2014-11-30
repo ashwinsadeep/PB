@@ -114,6 +114,15 @@ class PushNotificationTester(BaseAuthenticatedHandler):
         alert = self.get_argument('alert', 'Some random string')
         badge_count = self.get_argument('badge_count', 1)
         has_content = self.get_argument('has_content', 0)
+        if not notif_token:
+            e = InvalidInput('notification_token');
+            raise e
         
         notif_handler = PushNotificationHandler(notif_token)
-        notif_handler.send_notification(alert, badge_count, color, has_content)
+        status = notif_handler.send_notification(alert, badge_count, color, has_content)
+        if not status:
+            e = InternalError(display_data=status)
+            raise e
+
+        view = JsonView().render()
+        self.finish(view)
