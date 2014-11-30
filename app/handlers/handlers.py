@@ -4,6 +4,7 @@ from random import randint
 from tornado.web import HTTPError
 from app.exception.customexceptions import InvalidInput, SessionExpired, InternalError
 from app.handlers.base import BaseHandler, BaseAuthenticatedHandler
+from app.handlers.sendpushnotification import PushNotificationHandler
 from app.model.gamedata import GameDataModel
 from app.model.user import UserModel
 from app.view.templates.json.base import JsonView
@@ -104,3 +105,15 @@ class GetGameResultHandler(BaseAuthenticatedHandler):
         result = {'rank':12,'total_players':1658}
         view = JsonView(result).render()
         self.finish(view)
+
+
+class PushNotificationTester(BaseAuthenticatedHandler):
+    def post(self, *args, **kwargs):
+        notif_token = self.get_argument('notification_token', None)
+        color = self.get_argument('color', 'blue')
+        alert = self.get_argument('alert', 'Some random string')
+        badge_count = self.get_argument('badge_count', 1)
+        has_content = self.get_argument('has_content', 0)
+        
+        notif_handler = PushNotificationHandler(notif_token)
+        notif_handler.send_notification(alert, badge_count, color, has_content)
