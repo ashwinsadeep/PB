@@ -1,6 +1,7 @@
 import hashlib
 import json
 from random import randint
+from time import sleep
 from tornado.web import HTTPError
 from app.exception.customexceptions import InvalidInput, SessionExpired, InternalError
 from app.handlers.base import BaseHandler, BaseAuthenticatedHandler
@@ -59,7 +60,7 @@ class SetGameResultHandler(BaseAuthenticatedHandler):
 
 class GetApiAccessKeyHandler(BaseHandler):
     def get(self, *args, **kwargs):
-        view = JsonView({'api_access_key':'Hkaiooiwe7#jiop8'}).render()
+        view = JsonView({'api_access_key': 'Hkaiooiwe7#jiop8'}).render()
         self.finish(view)
 
 
@@ -98,11 +99,11 @@ class HttpNotFoundHandler(BaseHandler):
 
 class GetGameResultHandler(BaseAuthenticatedHandler):
     def post(self, *args, **kwargs):
-        tournament_id =  self.get_argument('tournament_id', None)
+        tournament_id = self.get_argument('tournament_id', None)
         if not tournament_id:
             raise InvalidInput('tournamen_id cannot be empty')
 
-        result = {'rank':12,'total_players':1658}
+        result = {'rank': 12, 'total_players': 1658}
         view = JsonView(result).render()
         self.finish(view)
 
@@ -115,14 +116,25 @@ class PushNotificationTester(BaseAuthenticatedHandler):
         badge_count = self.get_argument('badge_count', 1)
         has_content = self.get_argument('has_content', 0)
         if not notif_token:
-            e = InvalidInput('notification_token');
+            e = InvalidInput('notification_token')
             raise e
-        
+
         notif_handler = PushNotificationHandler(notif_token)
         status = notif_handler.send_notification(alert, badge_count, color, has_content)
         if not status:
             e = InternalError(display_data=status)
             raise e
 
+        view = JsonView().render()
+        self.finish(view)
+
+
+class DelayedResponseHandler(BaseAuthenticatedHandler):
+    def post(self, *args, **kwargs):
+        delay = self.get_argument('delay', None)
+        if not delay:
+            raise InvalidInput('delay cannot be empty')
+
+        sleep(float(delay))
         view = JsonView().render()
         self.finish(view)

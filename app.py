@@ -1,7 +1,8 @@
 import os
 from app.handlers.base import BaseHandler
 from app.handlers.handlers import GetGameDataHandler, SetGameResultHandler, GetApiAccessKeyHandler, CreateSessionHandler, \
-    RegisterNotificationTokenHandler, HttpNotFoundHandler, GetGameResultHandler, PushNotificationTester
+    RegisterNotificationTokenHandler, HttpNotFoundHandler, GetGameResultHandler, PushNotificationTester, \
+    DelayedResponseHandler
 
 
 __author__ = 'ashwin'
@@ -26,6 +27,7 @@ class Application(tornado.web.Application):
             url(r'/register_notification_token', RegisterNotificationTokenHandler),
             url(r'/get_tournament_result', GetGameResultHandler),
             url(r'/send_notification', PushNotificationTester),
+            url(r'/delayed_response', DelayedResponseHandler),
             url(r'/(.*)', HttpNotFoundHandler)
         ]
 
