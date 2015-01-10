@@ -24,8 +24,8 @@ class BaseHandler(RequestHandler):
                 display_data = exception.display_data
                 error_code = exception.error_code
 
-        if status_code == 404:
-            error_code = 404
+        if status_code == (404 | 405):
+            error_code = status_code
             display_data = None
 
         json_data = JsonView(display_data, error_code).render()

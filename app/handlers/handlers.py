@@ -129,7 +129,7 @@ class PushNotificationTester(BaseAuthenticatedHandler):
         self.finish(view)
 
 
-class DelayedResponseHandler(BaseAuthenticatedHandler):
+class DelayedResponseHandler(BaseHandler):
     def post(self, *args, **kwargs):
         delay = self.get_argument('delay', None)
         if not delay:
