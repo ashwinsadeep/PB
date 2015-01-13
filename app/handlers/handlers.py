@@ -2,6 +2,7 @@ import hashlib
 import json
 from random import randint
 from time import sleep
+import re
 from tornado.web import HTTPError
 from app.exception.customexceptions import InvalidInput, SessionExpired, InternalError
 from app.handlers.base import BaseHandler, BaseAuthenticatedHandler
@@ -138,3 +139,18 @@ class DelayedResponseHandler(BaseHandler):
         sleep(float(delay))
         view = JsonView().render()
         self.finish(view)
+
+
+class SubscibeInviteHandler(BaseHandler):
+    def post(self, *args, **kwargs):
+        email = self.get_argument('email', None)
+        if not email:
+            raise InvalidInput('email cannot be empty')
+
+        if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+            raise  InvalidInput('email is not valid')
+
+        user_model = UserModel();
+        user_model.insert_subscription_invite(email)
+        view = JsonView()
+        self.finish(view.render())
