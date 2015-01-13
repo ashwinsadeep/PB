@@ -143,6 +143,8 @@ class DelayedResponseHandler(BaseHandler):
 
 class SubscibeInviteHandler(BaseHandler):
     def post(self, *args, **kwargs):
+        self.set_header("Access-Control-Allow-Origin", "http://getpixelbots.com")
+        self.set_header("Access-Control-Allow-Credentials", 'true')
         email = self.get_argument('email', None)
         if not email:
             raise InvalidInput('email cannot be empty')
